@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include <sys/time.h>
+#include <netinet/in.h>
 
 #if defined(__MACH__)
 #include <unistd.h>
@@ -75,34 +76,40 @@ int main(int argc, char *argv[])
     {
         unsigned seed = 0;
         px = (unsigned char *)malloc(BUF_LEN);
-    
+        
         for (i=0; i<BUF_LEN; i++)
             px[i] = (unsigned char)r_rand(&seed);
     }
     
-
+    
+    
+    
     /*
      * Do both tests back and forth in a repeated loop, in order to avoid
      * effects of CPU ramping up
      */
     for (i=0; i<REPEAT_COUNT; i++) {
         unsigned j;
-    
+        
         /* block integer extraction */
         start = rdtsc();    
-        for (j=0; j<BUF_LEN; j += 4)
-            block_result += ntohl(*(unsigned *)(px+j));
+        for (j=0; j<BUF_LEN; j += 4) {
+            register unsigned x = ntohl(*(unsigned *)(px+j));
+            block_result += x;
+        }
         stop = rdtsc();
         block_clocks += (stop - start);
         
         /* stream integer extraction */
         start = rdtsc();    
-        for (j=0; j<BUF_LEN; j += 4)
-            stream_result += px[0]<<24 | px[1]<<16 | px[2]<<8 | px[3];
+        for (j=0; j<BUF_LEN; j += 4) {
+            register unsigned x = px[j]<<24 | px[j+1]<<16 | px[j+2]<<8 | px[j+3];
+            stream_result += x;
+        }
         stop = rdtsc();
         stream_clocks += (stop - start);
     }
-
+    
     /*
      * Print results
      */
@@ -112,9 +119,9 @@ int main(int argc, char *argv[])
         
         printf("block algo  = %5.3f clocks/integer\n", block_time);
         printf("stream algo = %5.3f clocks/integer\n", stream_time);
-    
+        
         printf("block result  = 0x%08x\n", block_result);
-        printf("stream result = 0x%08x\n", block_result);
+        printf("stream result = 0x%08x\n", stream_result);
     }    
     return 0;
 }
