@@ -94,8 +94,7 @@ int main(int argc, char *argv[])
         /* block integer extraction */
         start = rdtsc();    
         for (j=0; j<BUF_LEN; j += 4) {
-            register unsigned x = ntohl(*(unsigned *)(px+j));
-            block_result += x;
+            block_result += ntohl(*(unsigned *)(px+j));
         }
         stop = rdtsc();
         block_clocks += (stop - start);
@@ -103,8 +102,7 @@ int main(int argc, char *argv[])
         /* stream integer extraction */
         start = rdtsc();    
         for (j=0; j<BUF_LEN; j += 4) {
-            register unsigned x = px[j]<<24 | px[j+1]<<16 | px[j+2]<<8 | px[j+3];
-            stream_result += x;
+            stream_result += px[j]<<24 | px[j+1]<<16 | px[j+2]<<8 | px[j+3];
         }
         stop = rdtsc();
         stream_clocks += (stop - start);
