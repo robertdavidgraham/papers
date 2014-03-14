@@ -1,0 +1,259 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		11BB477918CB04E8004D399C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 11BB477818CB04E8004D399C /* main.c */; };
+		11BB477C18CB05A7004D399C /* bench-c-ptr.c in Sources */ = {isa = PBXBuildFile; fileRef = 11BB477B18CB05A7004D399C /* bench-c-ptr.c */; };
+		11BB477F18CB0D65004D399C /* bench-asm-ptr.c in Sources */ = {isa = PBXBuildFile; fileRef = 11BB477E18CB0D65004D399C /* bench-asm-ptr.c */; };
+		11BB478118CB1240004D399C /* bench-asm-ptr2.c in Sources */ = {isa = PBXBuildFile; fileRef = 11BB478018CB1240004D399C /* bench-asm-ptr2.c */; };
+		11BB478318CB12EE004D399C /* bench-asm-idx.c in Sources */ = {isa = PBXBuildFile; fileRef = 11BB478218CB12EE004D399C /* bench-asm-idx.c */; };
+		11C2FDBA18CFBEFF00061E8B /* smack1.c in Sources */ = {isa = PBXBuildFile; fileRef = 11C2FDB918CFBEFF00061E8B /* smack1.c */; };
+		11C2FDBE18CFBF0900061E8B /* smackqueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 11C2FDBC18CFBF0900061E8B /* smackqueue.c */; };
+		11C2FDC118CFBF3600061E8B /* pixie-timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 11C2FDBF18CFBF3600061E8B /* pixie-timer.c */; };
+		11C2FDC318D36B9C00061E8B /* bench-c-idx.c in Sources */ = {isa = PBXBuildFile; fileRef = 11C2FDC218D36B9C00061E8B /* bench-c-idx.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		11BB476018CB0414004D399C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		11BB476218CB0414004D399C /* smack2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = smack2; sourceTree = BUILT_PRODUCTS_DIR; };
+		11BB477818CB04E8004D399C /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../src/main.c; sourceTree = "<group>"; };
+		11BB477A18CB0543004D399C /* pixie-rdtsc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "pixie-rdtsc.h"; path = "../src/pixie-rdtsc.h"; sourceTree = "<group>"; };
+		11BB477B18CB05A7004D399C /* bench-c-ptr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "bench-c-ptr.c"; path = "../src/bench-c-ptr.c"; sourceTree = "<group>"; };
+		11BB477D18CB0686004D399C /* bench.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bench.h; path = ../src/bench.h; sourceTree = "<group>"; };
+		11BB477E18CB0D65004D399C /* bench-asm-ptr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "bench-asm-ptr.c"; path = "../src/bench-asm-ptr.c"; sourceTree = "<group>"; };
+		11BB478018CB1240004D399C /* bench-asm-ptr2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "bench-asm-ptr2.c"; path = "../src/bench-asm-ptr2.c"; sourceTree = "<group>"; };
+		11BB478218CB12EE004D399C /* bench-asm-idx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "bench-asm-idx.c"; path = "../src/bench-asm-idx.c"; sourceTree = "<group>"; };
+		11C2FDB818CFBEFF00061E8B /* smack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = smack.h; path = ../src/smack.h; sourceTree = "<group>"; };
+		11C2FDB918CFBEFF00061E8B /* smack1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = smack1.c; path = ../src/smack1.c; sourceTree = "<group>"; };
+		11C2FDBC18CFBF0900061E8B /* smackqueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = smackqueue.c; path = ../src/smackqueue.c; sourceTree = "<group>"; };
+		11C2FDBD18CFBF0900061E8B /* smackqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = smackqueue.h; path = ../src/smackqueue.h; sourceTree = "<group>"; };
+		11C2FDBF18CFBF3600061E8B /* pixie-timer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixie-timer.c"; path = "../src/pixie-timer.c"; sourceTree = "<group>"; };
+		11C2FDC018CFBF3600061E8B /* pixie-timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixie-timer.h"; path = "../src/pixie-timer.h"; sourceTree = "<group>"; };
+		11C2FDC218D36B9C00061E8B /* bench-c-idx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "bench-c-idx.c"; path = "../src/bench-c-idx.c"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		11BB475F18CB0414004D399C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		11BB475718CB0414004D399C = {
+			isa = PBXGroup;
+			children = (
+				11BB477718CB04D7004D399C /* src */,
+				11BB476518CB0414004D399C /* smack2 */,
+				11BB476318CB0414004D399C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		11BB476318CB0414004D399C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				11BB476218CB0414004D399C /* smack2 */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		11BB476518CB0414004D399C /* smack2 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = smack2;
+			sourceTree = "<group>";
+		};
+		11BB477718CB04D7004D399C /* src */ = {
+			isa = PBXGroup;
+			children = (
+				11C2FDBF18CFBF3600061E8B /* pixie-timer.c */,
+				11C2FDC018CFBF3600061E8B /* pixie-timer.h */,
+				11C2FDBC18CFBF0900061E8B /* smackqueue.c */,
+				11C2FDBD18CFBF0900061E8B /* smackqueue.h */,
+				11C2FDB818CFBEFF00061E8B /* smack.h */,
+				11C2FDB918CFBEFF00061E8B /* smack1.c */,
+				11BB477818CB04E8004D399C /* main.c */,
+				11BB477A18CB0543004D399C /* pixie-rdtsc.h */,
+				11BB477B18CB05A7004D399C /* bench-c-ptr.c */,
+				11BB477D18CB0686004D399C /* bench.h */,
+				11BB477E18CB0D65004D399C /* bench-asm-ptr.c */,
+				11BB478018CB1240004D399C /* bench-asm-ptr2.c */,
+				11BB478218CB12EE004D399C /* bench-asm-idx.c */,
+				11C2FDC218D36B9C00061E8B /* bench-c-idx.c */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		11BB476118CB0414004D399C /* smack2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 11BB476C18CB0414004D399C /* Build configuration list for PBXNativeTarget "smack2" */;
+			buildPhases = (
+				11BB475E18CB0414004D399C /* Sources */,
+				11BB475F18CB0414004D399C /* Frameworks */,
+				11BB476018CB0414004D399C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = smack2;
+			productName = smack2;
+			productReference = 11BB476218CB0414004D399C /* smack2 */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		11BB475918CB0414004D399C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 11BB475C18CB0414004D399C /* Build configuration list for PBXProject "smack2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 11BB475718CB0414004D399C;
+			productRefGroup = 11BB476318CB0414004D399C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				11BB476118CB0414004D399C /* smack2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		11BB475E18CB0414004D399C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				11BB477918CB04E8004D399C /* main.c in Sources */,
+				11BB477C18CB05A7004D399C /* bench-c-ptr.c in Sources */,
+				11BB477F18CB0D65004D399C /* bench-asm-ptr.c in Sources */,
+				11BB478118CB1240004D399C /* bench-asm-ptr2.c in Sources */,
+				11BB478318CB12EE004D399C /* bench-asm-idx.c in Sources */,
+				11C2FDBA18CFBEFF00061E8B /* smack1.c in Sources */,
+				11C2FDBE18CFBF0900061E8B /* smackqueue.c in Sources */,
+				11C2FDC118CFBF3600061E8B /* pixie-timer.c in Sources */,
+				11C2FDC318D36B9C00061E8B /* bench-c-idx.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		11BB476A18CB0414004D399C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		11BB476B18CB0414004D399C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		11BB476D18CB0414004D399C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		11BB476E18CB0414004D399C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		11BB475C18CB0414004D399C /* Build configuration list for PBXProject "smack2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				11BB476A18CB0414004D399C /* Debug */,
+				11BB476B18CB0414004D399C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		11BB476C18CB0414004D399C /* Build configuration list for PBXNativeTarget "smack2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				11BB476D18CB0414004D399C /* Debug */,
+				11BB476E18CB0414004D399C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 11BB475918CB0414004D399C /* Project object */;
+}
