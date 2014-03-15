@@ -1334,7 +1334,7 @@ inner_match_shift7(
        [px_end] "r" (px_end),
        [symbols] "r" (char_to_symbol),
        [table] "r" (table),
-       [match_limit] "r" (match_limit)
+       [match_limit] "r" ((unsigned long long)match_limit)
      : "%rax"
      );
     *state = (unsigned)row;
