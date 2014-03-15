@@ -4,7 +4,7 @@
 void
 bench_c_ptr(void)
 {
-    void *v;
+    volatile void *v;
     unsigned long long start, stop;
     unsigned i;
     
@@ -14,7 +14,7 @@ bench_c_ptr(void)
      */
     v = (void*)&v;
     
-    start = rdtsc();
+    start = __rdtsc();
     for (i=0; i<ITERATIONS; i++) {
         v = *(void**)v;
         v = *(void**)v;
@@ -36,12 +36,93 @@ bench_c_ptr(void)
         v = *(void**)v;
         v = *(void**)v;
         v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
     }
-    stop = rdtsc();
+    stop = __rdtsc();
     
+    if (v)
     {
         unsigned long long elapsed = stop - start;
-        double clocks = elapsed/20.0/ITERATIONS;
+        double clocks = elapsed/100.0/ITERATIONS;
         printf("c-ptr = %5.3f-clocks\n", clocks);
     }
 }

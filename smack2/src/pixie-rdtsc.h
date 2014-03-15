@@ -4,7 +4,7 @@
 #if defined(_MSC_VER)
 #include <intrin.h>
 #elif defined(__GNUC__)
-static __inline__ unsigned long long rdtsc(void)
+static __inline__ unsigned long long __rdtsc(void)
 {
     unsigned long hi = 0, lo = 0;
     __asm__ __volatile__ ("lfence\n\trdtsc" : "=a"(lo), "=d"(hi));

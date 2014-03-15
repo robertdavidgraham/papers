@@ -15,7 +15,8 @@ bench_asm_ptr(void)
     v = (void*)&v;
     
     i = ITERATIONS;
-    start = rdtsc();
+    start = __rdtsc();
+#if defined(__GNUC__) && (defined(__i386__) || defined(__amd64__))
     __asm__ __volatile 
     (
      "again:\n"
@@ -56,7 +57,81 @@ bench_asm_ptr(void)
      : "r" (i), "r" (v)
      
      );
-    stop = rdtsc();
+#elif defined(_MSC_VER) && defined(_M_IX86)
+    __asm {
+        mov eax, i
+        mov ebx, v
+
+again:
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+        mov ebx, dword ptr[ebx]
+
+        dec eax
+        jg again
+    };
+#else
+    while (i--) {
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+    }
+#endif
+    stop = __rdtsc();
     
     {
         unsigned long long elapsed = stop - start;

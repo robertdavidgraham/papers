@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -6,143 +7,17 @@
 #include <ctype.h>
 
 #include "pixie-rdtsc.h"
+#include "pixie-cpuid.h"
+#include "pixie-timer.h"
 #include "bench.h"
 #include "smack.h"
 
-
-/******************************************************************************
- ******************************************************************************/
-#ifndef NOBENCHMARK
-#include "pixie-timer.h"
-#if defined(_MSC_VER)
-#include <intrin.h>
-#elif defined(__GNUC__)
-static __inline__ unsigned long long __rdtsc(void)
-{
-#if defined(i386) || defined(__i386__) || defined(__x86_64__) || defined(__amd64)
-    unsigned long hi = 0, lo = 0;
-    __asm__ __volatile__ ("lfence\n\trdtsc" : "=a"(lo), "=d"(hi));
-    return ( (unsigned long long)lo)|( ((unsigned long long)hi)<<32 );
-#else
-    return 0;
+#if defined(WIN32)
+#include <direct.h>
+#define getcwd _getcwd
 #endif
-}
-
-static __inline__ void __cpu_vendor(char vendor[16])
-{
-#if defined(i386) || defined(__i386__) || defined(__x86_64__) || defined(__amd64)
-    asm volatile ( 
-                  "mov $0, %%eax\n"
-                  "cpuid\n"
-                  "mov %%ebx, (%[vendor])\n"
-                  "mov %%edx, 4(%[vendor])\n"
-                  "mov %%ecx, 8(%[vendor])\n"
-                  "movb $0, 12(%[vendor])\n" 
-                  :
-                  : [vendor] "r"(vendor) : "eax", "ebx", "ecx", "edx" );
-#else
-    strcpy(vendor, "unknown");
-#endif
-}
 
 
-struct CpuInfo {
-    unsigned stepping;
-    unsigned model;
-    unsigned family;
-    unsigned type;
-    const char *codename;
-    unsigned codenumber;
-};
-
-static __inline__ void __cpu_info(struct CpuInfo *info)
-{
-    unsigned x;
-#if defined(i386) || defined(__i386__) || defined(__x86_64__) || defined(__amd64)
-    asm volatile ( 
-                  "mov $1, %%eax\n"
-                  "cpuid\n"
-                  : "=a" (x)
-                  );
-    //printf("0x%08x\n", x);
-    /*
-     3:0 – Stepping
-     7:4 – Model
-     11:8 – Family
-     13:12 – Processor Type
-     19:16 – Extended Model
-     27:20 – Extended Family
-     */
-    info->stepping = (x>>0) & 0xF;
-    info->model = (x>>4) & 0xF;
-    info->family = (x>>8) & 0xF;
-    info->type = (x>>12) & 0x3;
-    info->model |= (x>>12) & 0xF0;
-    info->family |= (x>>20) & 0xFF0;
-    info->codenumber = x>>4;
-    switch (x>>4) {
-        case 0x306A: info->codename = "Ivy Bridge"; break;
-        case 0x206A: info->codename = "Sandy Bridge"; break;
-        case 0x206D: info->codename = "Sandy Bridge-E"; break;
-        case 0x2065: info->codename = "Westmere"; break;
-        case 0x206C: info->codename = "Westmere-EP"; break;
-        case 0x206F: info->codename = "Westmere-EX"; break;
-        case 0x106E: info->codename = "Nehalem"; break;
-        case 0x106A: info->codename = "Nehalem-EP"; break;
-        case 0x206E: info->codename = "Nehalem-EX"; break;
-        case 0x1067: info->codename = "Penryn"; break;
-        case 0x106D: info->codename = "Penryn-E"; break;
-        case 0x006F: info->codename = "Merom"; break;
-        case 0x1066: info->codename = "Merom"; break;
-        case 0x0066: info->codename = "Presler"; break;
-        case 0x0063: info->codename = "Prescott"; break;
-        case 0x0064: info->codename = "Prescott"; break;
-        case 0x006D: info->codename = "Dothan"; break;
-        
-        case 0x0366: info->codename = "Cedarview"; break;
-        case 0x0266: info->codename = "Lincroft"; break;
-        case 0x016C: info->codename = "Pineview"; break;
-        default: info->codename = "Unknown"; break;
-    }
-#else
-    strcpy(vendor, "unknown");
-#endif
-}
-
-static __inline__ void __cpu_model(char model[64])
-{
-#if defined(i386) || defined(__i386__) || defined(__x86_64__) || defined(__amd64)
-    asm volatile ( 
-                  "mov $0x80000002, %%eax\n"
-                  "cpuid\n"
-                  "mov %%eax, (%[model])\n"
-                  "mov %%ebx, 4(%[model])\n"
-                  "mov %%ecx, 8(%[model])\n"
-                  "mov %%edx, 12(%[model])\n"
-                  "mov $0x80000003, %%eax\n"
-                  "cpuid\n"
-                  "mov %%eax, 16(%[model])\n"
-                  "mov %%ebx, 20(%[model])\n"
-                  "mov %%ecx, 24(%[model])\n"
-                  "mov %%edx, 28(%[model])\n"
-                  "mov $0x80000004, %%eax\n"
-                  "cpuid\n"
-                  "mov %%eax, 32(%[model])\n"
-                  "mov %%ebx, 46(%[model])\n"
-                  "mov %%ecx, 40(%[model])\n"
-                  "mov %%edx, 44(%[model])\n"
-                  "movb $0, 48(%[model])\n" 
-                  :
-                  : [model] "r"(model) : "eax", "ebx", "ecx", "edx" );
-    while (model[0] && isspace(model[0]&0xFF))
-        memmove(model, model+1, strlen(model));
-#else
-    strcpy(vendor, "unknown");
-#endif
-}
-
-#endif
-#endif
 
 /******************************************************************************
  * simply get command-line parameter
@@ -200,28 +75,12 @@ do_haystack(const struct SMACK *smack,
         double elapsed = ((double)(stop - start))/(1000000000.0);
         double rate = (sizeof_buffer*iterations*8ULL)/elapsed;
         double cycles = (sizeof_buffer*iterations*1.0)/(1.0*(cycle2-cycle1));
-        char vendor[16];
-        char model[64];
-        struct CpuInfo info;
-        
-        __cpu_vendor(vendor);
-        __cpu_model(model);
-        __cpu_info(&info);
         
         rate /= 1000000.0;
         
         printf("Found count = %u\n", (unsigned)(found_count/iterations));
         printf("Search speed = %5.3f-gbps (%3.2f-Hz/byte)\n", rate/1000.0, (1.0/cycles));
-        printf("CPU width = %u-bits\n", (unsigned)sizeof(void*)*8);
-        printf("CPU speed = %5.3f-GHz\n", ((cycle2-cycle1)*1.0/elapsed)/1000000000.0);
-        printf("CPU vendor = \"%s\"\n", vendor);
-        printf("CPU brand = \"%s\"\n", model);
-        printf("CPU codename = \"%s\" (0x%X" "x)\n", info.codename, info.codenumber);
-        printf("CPU info = type(%u) family(%u) model(%u) stepping(%u)\n",
-               info.type, info.family, info.model, info.stepping);
-        
-        printf("\n");
-        
+        printf("CPU speed = %5.3f-GHz\n", ((cycle2-cycle1)*1.0/elapsed)/1000000000.0);        
     }
 
 }
@@ -231,12 +90,36 @@ do_haystack(const struct SMACK *smack,
 int
 main(int argc, char *argv[])
 {
-    /*{
+    printf("---- SMACK/2 - benchmark program ----\n");
+
+    {
         char dir[512];
         getcwd(dir, sizeof(dir));
-        printf("%s\n", dir);
-    }*/
-    
+        printf("directory = %s\n", dir);
+    }
+
+    /*
+     * Print cpu info
+     */
+    {
+        char vendor[16];
+        char brand[64];
+        struct CpuInfo info;
+        
+        pixie_cpu_vendor(vendor);
+        pixie_cpu_brand(brand);
+        pixie_cpu_info(&info);
+
+        printf("CPU width = %u-bits\n", (unsigned)sizeof(void*)*8);
+        printf("CPU vendor = \"%s\"\n", vendor);
+        printf("CPU brand = \"%s\"\n", brand);
+        printf("CPU codename = \"%s\" (0x%X" "x)\n", info.codename, info.codenumber);
+        printf("CPU info = type(%u) family(%u) model(%u) stepping(%u)\n",
+               info.type, info.family, info.model, info.stepping);
+        
+        printf("\n");
+    }
+
     /*
      * First, do a unit-test. If the unit-test fails, then it's pointless
      * continueing with the benchmarks
@@ -279,7 +162,7 @@ main(int argc, char *argv[])
         bench_c_ptr();
         bench_c_idx(0);
         bench_asm_ptr();
-        bench_asm_ptr2();
+        //bench_asm_ptr2();
         bench_asm_idx();
         printf("\n");
         smack_benchmark();
@@ -316,8 +199,8 @@ main(int argc, char *argv[])
          */
         buf = (char*)malloc(sizeof_buf);
         if (buf == 0) {
-            fprintf(stderr, "Could not allocate %llu bytes for buffer\n",
-                    (unsigned long long)sizeof_buf);
+            fprintf(stderr, "Could not allocate %u bytes for buffer\n",
+                    (unsigned)sizeof_buf);
             return 1;
         }
         
@@ -339,14 +222,14 @@ main(int argc, char *argv[])
             }
             if (bytes_read < sizeof_buf) {
                 fprintf(stderr, "ERROR: could not read entire file\n");
-                fprintf(stderr, "wanted %llu bytes, read %llu bytes\n",
-                        (unsigned long long)sizeof_buf, 
-                        (unsigned long long)bytes_read);
+                fprintf(stderr, "wanted %u bytes, read %u bytes\n",
+                        (unsigned)sizeof_buf, 
+                        (unsigned)bytes_read);
                 sizeof_buf = bytes_read;
             }
             fclose(fp);
             
-            fprintf(stderr, "file-size = %llu\n", (unsigned long long)sizeof_buf);
+            fprintf(stderr, "file-size = %u\n", (unsigned)sizeof_buf);
         }
         
         /*

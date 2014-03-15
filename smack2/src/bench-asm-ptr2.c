@@ -17,10 +17,21 @@ bench_asm_ptr2(void)
     v2 = (void*)&v;
     
     i = ITERATIONS;
-    start = rdtsc();
+    start = __rdtsc();
+#if defined(__GNUC__) && (defined(__i386__) || defined(__amd64__))
     __asm__ __volatile 
     (
      "again:\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
+     "mov (%1), %1\n"
      "mov (%1), %1\n"
      "mov (%1), %1\n"
      "mov (%1), %1\n"
@@ -38,11 +49,35 @@ bench_asm_ptr2(void)
      : "r" (i), "r" (v)
      
      );
-    stop = rdtsc();
+#else
+    while (i--) {
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+        v = *(void**)v;
+    }
+#endif
+    stop = __rdtsc();
     
     {
         unsigned long long elapsed = stop - start;
-        double clocks = elapsed/10.0/ITERATIONS;
+        double clocks = elapsed/20.0/ITERATIONS;
         printf("asm-ptr2 = %5.3f-clocks\n", clocks);
     }
 }

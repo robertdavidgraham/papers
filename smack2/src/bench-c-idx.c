@@ -14,7 +14,7 @@ bench_c_idx(unsigned row)
      */
     v = (void*)&v;
     
-    start = rdtsc();
+    start = __rdtsc();
     for (i=0; i<ITERATIONS; i++) {
 		v = ((void**)v)[row];
 		v = ((void**)v)[row];
@@ -37,7 +37,7 @@ bench_c_idx(unsigned row)
 		v = ((void**)v)[row];
 		v = ((void**)v)[row];
     }
-    stop = rdtsc();
+    stop = __rdtsc();
     
     {
         unsigned long long elapsed = stop - start;

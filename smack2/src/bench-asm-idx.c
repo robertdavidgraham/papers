@@ -5,8 +5,8 @@
 void
 bench_asm_idx(void)
 {
-    unsigned table[10000];
-    unsigned long long index = 0;
+    unsigned table[10001];
+    size_t index = 0;
     unsigned long long start, stop;
     unsigned i;
     unsigned *p = &table[0];
@@ -18,8 +18,8 @@ bench_asm_idx(void)
     
     
     i = ITERATIONS;
-    start = rdtsc();
-#if defined(__amd64__) || defined(__x86_64__)
+    start = __rdtsc();
+#if defined(__GNUC__) && (defined(__amd64__) || defined(__x86_64__))
     __asm__ __volatile 
     (
      "again:\n"
@@ -49,7 +49,7 @@ bench_asm_idx(void)
      : [i]  "r" (i), [table] "r" (p), "[index]" (index)
      : "%rax"
      );
-#elif defined(__i386__)
+#elif defined (__GNUC__) && defined(__i386__)
     __asm__ __volatile 
     (
      "again:\n"
@@ -79,10 +79,50 @@ bench_asm_idx(void)
      : [i]  "r" (i), [table] "r" (p), "[index]" (index)
      : "%rax"
      );
+#elif defined(_MSC_VER) && defined(_M_IX86)
+    __asm {
+        push eax
+        push ebx
+        push esi
+
+        mov eax, i
+        mov ebx, p
+        mov esi, index
+again:
+
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+        mov esi, dword ptr[ebx + esi*4]
+
+        dec eax
+        jg again
+
+        pop esi
+        pop ebx
+        pop eax
+    };
+
 #else
 #error unknown processor
 #endif
-    stop = rdtsc();
+    stop = __rdtsc();
     
     {
         unsigned long long elapsed = stop - start;

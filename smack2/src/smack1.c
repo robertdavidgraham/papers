@@ -1299,19 +1299,21 @@ inner_match(    const unsigned char *px,
 /*****************************************************************************
  *****************************************************************************/
 static size_t
-inner_match_shift7(    const unsigned char *px, 
+inner_match_shift7(    
+            const unsigned char *px, 
             size_t length,
             const unsigned short *char_to_symbol,
             const transition_t *table, 
             unsigned *state, 
-            unsigned long long match_limit,
+            const transition_t match_limit,
             unsigned row_shift) 
 {
+
+#if defined (__GNUC__) && (defined(__amd64) || defined(__x86_64))
     const unsigned char *px_start = px;
     const unsigned char *px_end = px + length;
     unsigned long long row = *state;
 
-#if defined (__GNUC__) && (defined(__amd64) || defined(__x86_64))
     __asm __volatile__ 
     (
      "again:"
@@ -1319,7 +1321,7 @@ inner_match_shift7(    const unsigned char *px,
      "movzbq (%[px]), %%rax\n"                 /* next byte of input */
      "movzwq (%[symbols],%%rax,2), %%rax\n"    /* get symbol */
      "add %[table], %%rax\n"
-     "movslq (%%rax,%[row],4), %[row]\n"
+     "cmova (%%rax,%[row],4), %[row]\n"
      "cmp %[row], %[match_limit]; jb end;\n"    /* if match, end loop */
      
      "inc %[px]\n"
@@ -1335,8 +1337,74 @@ inner_match_shift7(    const unsigned char *px,
        [match_limit] "r" (match_limit)
      : "%rax"
      );
+    *state = (unsigned)row;
+    return px - px_start;
+
+#elif defined(_MSC_VER) && defined(_M_IX86)
+    const unsigned char *px_start = px;
+    const unsigned char *px_end = px + length;
+    unsigned row = *state;
+    __asm {
+        push        ebx
+        push        ecx
+        push        edx
+        push        edi
+        push        esi
+        push        ebp
+
+        mov         eax, px   // px
+        mov         edi, char_to_symbol   // char_to_symbol
+        mov         esi, table   // table
+        mov         ecx, row   // row
+        mov         edx, match_limit   // match_limit
+        
+        mov         ebp, px_end   // length
+        
+
+again:
+        movzx       ebx,byte ptr [eax]          //c = px[0]
+        movzx       ebx,word ptr [edi+ebx*2]    //column = char_to_symbol[c]
+        add         ebx, esi                    //+ column
+        mov         ecx,dword ptr [ebx+ecx*4]    //row = table[row][column] 
+        cmp         ecx,edx                     //if (row >= match_limit)
+        jae         END                         //  goto match
+          
+
+        add         eax,1                       // px += 1
+        cmp         eax,ebp                     // if (px < px_end)
+        jb          again                        //    goto LOOP
+                    
+
+END:
+        pop         ebp
+
+        mov         row, ecx       // *state = row
+        mov         px, eax
+
+        pop         esi
+        pop         edi
+        pop         edx
+        pop         ecx
+        pop         ebx
+    }
+
+    *state = (unsigned)row;
+    return px - px_start;
+        //eax = px
+        //ebx = c
+        //ecx = row
+        //edx = match_limit
+        //edi = char_to_symbol
+        //esi = table
+        //ebp = px_end
+        //esp =
+
+
 
 #else
+    const unsigned char *px_start = px;
+    const unsigned char *px_end = px + length;
+    unsigned long long row = *state;
     for ( ; px<px_end; px++) {
         unsigned char column;
         column = char_to_symbol[*px]/sizeof(transition_t);
@@ -1344,10 +1412,10 @@ inner_match_shift7(    const unsigned char *px,
         if (row >= match_limit)
             break;
     }
+    *state = (unsigned)row;
+    return px - px_start;
 #endif
 
-    *state = row;
-    return px - px_start;
 }
 
 /*****************************************************************************
