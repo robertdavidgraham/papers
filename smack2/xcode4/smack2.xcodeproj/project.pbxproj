@@ -16,6 +16,7 @@
 		11C2FDBE18CFBF0900061E8B /* smackqueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 11C2FDBC18CFBF0900061E8B /* smackqueue.c */; };
 		11C2FDC118CFBF3600061E8B /* pixie-timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 11C2FDBF18CFBF3600061E8B /* pixie-timer.c */; };
 		11C2FDC318D36B9C00061E8B /* bench-c-idx.c in Sources */ = {isa = PBXBuildFile; fileRef = 11C2FDC218D36B9C00061E8B /* bench-c-idx.c */; };
+		11C2FE7718D55DA100061E8B /* pixie-cpuid.c in Sources */ = {isa = PBXBuildFile; fileRef = 11C2FE7518D55DA100061E8B /* pixie-cpuid.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,6 +47,8 @@
 		11C2FDBF18CFBF3600061E8B /* pixie-timer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixie-timer.c"; path = "../src/pixie-timer.c"; sourceTree = "<group>"; };
 		11C2FDC018CFBF3600061E8B /* pixie-timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixie-timer.h"; path = "../src/pixie-timer.h"; sourceTree = "<group>"; };
 		11C2FDC218D36B9C00061E8B /* bench-c-idx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "bench-c-idx.c"; path = "../src/bench-c-idx.c"; sourceTree = "<group>"; };
+		11C2FE7518D55DA100061E8B /* pixie-cpuid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "pixie-cpuid.c"; path = "../src/pixie-cpuid.c"; sourceTree = "<group>"; };
+		11C2FE7618D55DA100061E8B /* pixie-cpuid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "pixie-cpuid.h"; path = "../src/pixie-cpuid.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +65,8 @@
 		11BB475718CB0414004D399C = {
 			isa = PBXGroup;
 			children = (
+				11C2FE7518D55DA100061E8B /* pixie-cpuid.c */,
+				11C2FE7618D55DA100061E8B /* pixie-cpuid.h */,
 				11BB477718CB04D7004D399C /* src */,
 				11BB476518CB0414004D399C /* smack2 */,
 				11BB476318CB0414004D399C /* Products */,
@@ -163,6 +168,7 @@
 				11C2FDBE18CFBF0900061E8B /* smackqueue.c in Sources */,
 				11C2FDC118CFBF3600061E8B /* pixie-timer.c in Sources */,
 				11C2FDC318D36B9C00061E8B /* bench-c-idx.c in Sources */,
+				11C2FE7718D55DA100061E8B /* pixie-cpuid.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

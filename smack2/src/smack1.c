@@ -1312,7 +1312,7 @@ inner_match_shift7(
 #if defined (__GNUC__) && (defined(__amd64) || defined(__x86_64))
     const unsigned char *px_start = px;
     const unsigned char *px_end = px + length;
-    unsigned long long row = *state;
+    unsigned long row = *state;
 
     __asm __volatile__ 
     (
@@ -1321,7 +1321,7 @@ inner_match_shift7(
      "movzbq (%[px]), %%rax\n"                 /* next byte of input */
      "movzwq (%[symbols],%%rax,2), %%rax\n"    /* get symbol */
      "add %[table], %%rax\n"
-     "cmova (%%rax,%[row],4), %[row]\n"
+     "movslq (%%rax,%[row],4), %[row]\n"
      "cmp %[row], %[match_limit]; jb end;\n"    /* if match, end loop */
      
      "inc %[px]\n"
