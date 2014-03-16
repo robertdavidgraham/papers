@@ -1364,7 +1364,7 @@ inner_match_shift7(
 again:
         movzx       ebx,byte ptr [eax]          //c = px[0]
         movzx       ebx,word ptr [edi+ebx*2]    //column = char_to_symbol[c]
-        add         ebx, esi                    //+ column
+        lea         ebx, [ebx+esi]                    //+ column
         mov         ecx,dword ptr [ebx+ecx*4]    //row = table[row][column] 
         cmp         ecx,edx                     //if (row >= match_limit)
         jae         END                         //  goto match
