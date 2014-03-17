@@ -1242,64 +1242,24 @@ smack_search(   const struct SMACK * smack,
     return found_count;
 }
 
-const struct SMACK *ssmack;
-
 /*****************************************************************************
+ *
+ *    OPTIMIZATION HAPPENS HERE
+ *
+ * This function takes up 99% of the execution time during pattern search.
+ * Therefore, we do our best to optimize it in machine code.
+ *
+ * The max theoretical throughput is that it takes one L1 cache hit per
+ * byte of input. Modern x86 CPUs have 4 Hz caches, therefore, it takes 
+ * 4 clock cycles to process each byte of input. In other words, the bit
+ * rate is double the clock rate of the CPU, so a 3-GHz CPU can search
+ * data at 6-gbps.
+ *
+ * Compilers don't quite optimize well enough, so it takes a little assembly
+ * code to achieve the theoretical speed.
  *****************************************************************************/
 static size_t
-inner_match(    const unsigned char *px, 
-                size_t length,
-                const unsigned short *char_to_symbol,
-                const transition_t *table, 
-                unsigned *state, 
-                unsigned match_limit,
-                unsigned row_shift) 
-{
-    const unsigned char *px_start = px;
-    const unsigned char *px_end = px + length;
-    unsigned row = *state;
-    
-    for ( ; px<px_end; px++) {
-        unsigned column;
-        
-        /* Convert that character into a symbol. This compresses the table.
-         * Even though there are 256 possible combinations for a byte, we
-         * are probably using fewer than 32 individual characters in the
-         * patterns we are looking for. This step allows us to create tables
-         * that are only 32 elements wide, instead of 256 elements wide */
-        column = char_to_symbol[*px]/sizeof(transition_t);
-        
-        /*printf("[%u] %s+%c = %s%s [%u]\n",
-               row>>row_shift,
-               ssmack->m_match[row>>row_shift].DEBUG_name,
-               *px,
-               ssmack->m_match[*(table + row + column) >> row_shift].DEBUG_name,
-               ssmack->m_match[*(table + row + column) >> row_shift].m_count?"$$":"",
-               *(table + row + column) >> row_shift);*/
-        /*
-         * STATE TRANSITION
-         * Given the current row, lookup the symbol, and find the next row.
-         * Logically, this is the following  calculation:
-         *    row = table[row][column]
-         * However, since row can have a variable width (depending on the
-         * number of characters in a pattern), we have to do the calculation
-         * manually.
-         */
-        row = *(table + row + column);
-        
-
-        if (row >= match_limit)
-            break;
-        
-    }
-
-    *state = row;
-    return px - px_start;
-}
-/*****************************************************************************
- *****************************************************************************/
-static size_t
-inner_match_shift7(    
+inner_match(    
             const unsigned char *px, 
             size_t length,
             const unsigned short *char_to_symbol,
@@ -1309,19 +1269,19 @@ inner_match_shift7(
             unsigned row_shift) 
 {
 
-#if defined (__GNUC__) && (defined(__amd64) || defined(__x86_64))
+#if defined (__GxNUC__) && (defined(__amd64) || defined(__x86_64))
     const unsigned char *px_start = px;
     const unsigned char *px_end = px + length;
     unsigned long row = *state;
 
     __asm __volatile__ 
     (
-     "again:"
+     "again:\n"
      
      "movzbq (%[px]), %%rax\n"                 /* next byte of input */
      "movzwq (%[symbols],%%rax,2), %%rax\n"    /* get symbol */
      "add %[table], %%rax\n"
-     "movslq (%%rax,%[row],4), %[row]\n"
+     "movslq (%%rax,%[row],4), %0\n"
      "cmp %[row], %[match_limit]; jb end;\n"    /* if match, end loop */
      
      "inc %[px]\n"
@@ -1407,8 +1367,31 @@ END:
     unsigned long long row = *state;
     for ( ; px<px_end; px++) {
         unsigned char column;
+        
+        /* Convert that character into a symbol. This compresses the table.
+         * Even though there are 256 possible combinations for a byte, we
+         * are probably using fewer than 32 individual characters in the
+         * patterns we are looking for. This step allows us to create tables
+         * that are only 32 elements wide, instead of 256 elements wide */
         column = char_to_symbol[*px]/sizeof(transition_t);
-        row = *(table + row + column);
+        
+        /*
+         * STATE TRANSITION
+         * Given the current row, lookup the symbol, and find the next row.
+         * Logically, this is the following  calculation:
+         *    row = table[row][column]
+         * However, since row can have a variable width (depending on the
+         * number of characters in a pattern), we have to do the calculation
+         * manually.
+         */
+        row = *((table + column) + row);
+        
+        /*
+         * We test to see if there's a 'match' by first sorting the states,
+         * into a range of non-matching states, and a range of matching 
+         * states. If the row is in the range of matching states, then
+         * we know we've got a match and must exist the function
+         */
         if (row >= match_limit)
             break;
     }
@@ -1450,40 +1433,13 @@ smack_search_next(      const struct SMACK *  smack,
  
     /* 'for all bytes in this block' */
     if (!current_matches) {
-        /*if ((length-i) & 1)
-            i += inner_match(px + i, 
-                             length - i,
-                             char_to_symbol,
-                             table, 
-                             &row, 
-                             match_limit,
-                             row_shift);
-        if (row < match_limit && i < length)*/
-        switch (row_shift) {
-            default:
-                i += inner_match_shift7(px + i, 
-                                 length - i,
-                                 char_to_symbol,
-                                 table, 
-                                 &row, 
-                                 match_limit,
-                                 row_shift);
-                break;
-            case 70:
-                ssmack = smack;
-                i += inner_match(px + i, 
-                                 length - i,
-                                 char_to_symbol,
-                                 table, 
-                                 &row, 
-                                 match_limit,
-                                 row_shift);                    
-                assert(0 == (row>>24));
-                break;
-
-        }
-
-        //printf("*** row=%u, i=%u, limit=%u\n", row, i, match_limit);
+        i += inner_match(px + i, 
+                         length - i,
+                         char_to_symbol,
+                         table, 
+                         &row, 
+                         match_limit,
+                         row_shift);
 
         /* Test to see if we have one (or more) matches, and if so, call
          * the callback function */
@@ -1546,13 +1502,14 @@ smack_search_end(       struct SMACK *  smack,
     transition_t *table = smack->y_table;
     unsigned row = *current_state << smack->y_row_shift;
     const struct SmackMatches *match = smack->m_match;
-    unsigned column = smack->char_to_symbol[CHAR_ANCHOR_END]/sizeof(transition_t);
+    unsigned column;
 
     /*
      * This is the same logic as for "smack_search()", except there is
      * only one byte of input -- the virtual character ($) that represents
      * the anchor at the end of some patterns.
      */
+    column = smack->char_to_symbol[CHAR_ANCHOR_END]/sizeof(transition_t);
     row = *(transition_t*)(table + row + column);
     if (match[row].m_count)
         found_count = handle_match(smack, 0, cb_found, callback_data, row);
