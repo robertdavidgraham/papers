@@ -1322,20 +1322,17 @@ inner_match(
         
 
 again:
-        movzx       ebx,byte ptr [eax]          //c = px[0]
+        movzx       ebx,byte ptr [eax]          //c = buf[0]
         movzx       ebx,word ptr [edi+ebx*2]    //column = char_to_symbol[c]
-        lea         ebx, [ebx+esi]                    //+ column
-        mov         ecx,dword ptr [ebx+ecx*4]    //row = table[row][column] 
+        add         ebx, esi                    //rable + column
+        mov         ecx,dword ptr [ebx+ecx*4]   //row = table[row][column] 
         cmp         ecx,edx                     //if (row >= match_limit)
         jae         END                         //  goto match
-          
-
-        add         eax,1                       // px += 1
-        cmp         eax,ebp                     // if (px < px_end)
-        jb          again                        //    goto LOOP
-                    
-
+        add         eax,1                       // buf += 1
+        cmp         eax,ebp                     // if (buf < buf_end)
+        jb          again                       //    goto again
 END:
+        
         pop         ebp
 
         mov         row, ecx       // *state = row
