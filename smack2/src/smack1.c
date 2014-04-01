@@ -1269,7 +1269,7 @@ inner_match(
             unsigned row_shift) 
 {
 
-#if defined (__GxNUC__) && (defined(__amd64) || defined(__x86_64))
+#if defined (__GNUC__) && (defined(__amd64) || defined(__x86_64))
     const unsigned char *px_start = px;
     const unsigned char *px_end = px + length;
     unsigned long row = *state;
