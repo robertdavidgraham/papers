@@ -8,12 +8,12 @@ CPU info = type(0) family(6) model(58) stepping(9)
 
 --- low-level benchmarks ---
 c-ptr = 0.000-clocks
-c-idx = 3.607-clocks
-asm-ptr = 2.860-clocks
-asm-idx = 3.577-clocks
+c-idx = 5.036-clocks
+asm-ptr = 4.003-clocks
+asm-idx = 5.008-clocks
 
 -- smack-1 -- 
-bits/second = 5524.555-million
-clocks/byte = 3.620-clocks
+bits/second = 3988.266-million
+clocks/byte = 5.015-clocks
 clockrate = 2.500-GHz
 
