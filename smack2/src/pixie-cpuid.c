@@ -144,6 +144,7 @@ void pixie_cpu_info(struct CpuInfo *info)
         case 0x016C: info->codename = "Pineview"; break;
 
         case 0x500F1: info->codename = "Bobcat"; break;
+        case 0x600F2: info->codename = "Piledriver"; break;
 
         default: info->codename = "Unknown"; break;
     }
