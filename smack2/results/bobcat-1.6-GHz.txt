@@ -1,0 +1,19 @@
+---- SMACK/2 - benchmark program ----
+directory = Z:\
+CPU width = 32-bits
+CPU vendor = "AuthenticAMD"
+CPU brand = "AMD E-350 Processor"
+CPU codename = "Bobcat" (0x500F1x)
+CPU info = type(0) family(15) model(1) stepping(0)
+
+--- low-level benchmarks ---
+c-ptr = 3.061-clocks
+c-idx = 3.049-clocks
+asm-ptr = 3.033-clocks
+asm-idx = 4.247-clocks
+
+-- smack-1 -- 
+bits/second = 1886.152-million
+clocks/byte = 6.770-clocks
+clockrate = 1.596-GHz
+
