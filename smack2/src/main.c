@@ -14,6 +14,7 @@
 
 #if defined(WIN32)
 #include <direct.h>
+#include <Windows.h>
 #define getcwd _getcwd
 #else
 #include <unistd.h>
@@ -99,6 +100,13 @@ main(int argc, char *argv[])
         getcwd(dir, sizeof(dir));
         printf("directory = %s\n", dir);
     }
+
+#if WIN32
+    {
+        SetProcessAffinityMask(NULL, 1);
+        SetPriorityClass(NULL,  REALTIME_PRIORITY_CLASS);
+    }
+#endif
 
     /*
      * Print cpu info
