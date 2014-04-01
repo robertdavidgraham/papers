@@ -1300,7 +1300,7 @@ inner_match(
     *state = (unsigned)row;
     return px - px_start;
 
-#elif defined(_MSC_VER) && defined(_M_IX86)
+#elif defined(_xMSC_VER) && defined(_M_IX86)
     const unsigned char *px_start = px;
     const unsigned char *px_end = px + length;
     unsigned row = *state;
