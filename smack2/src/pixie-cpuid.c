@@ -139,9 +139,12 @@ void pixie_cpu_info(struct CpuInfo *info)
         case 0x0064: info->codename = "Prescott"; break;
         case 0x006D: info->codename = "Dothan"; break;
         
-        case 0x0366: info->codename = "Cedarview"; break;
+        case 0x3066: info->codename = "Cedarview"; break;
         case 0x0266: info->codename = "Lincroft"; break;
         case 0x016C: info->codename = "Pineview"; break;
+
+        case 0x500F1: info->codename = "Bobcat"; break;
+
         default: info->codename = "Unknown"; break;
     }
 }
