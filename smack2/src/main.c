@@ -20,7 +20,11 @@
 #include <unistd.h>
 #endif
 
-
+#ifdef __linux__
+#define _USE_GNU
+#define __USE_GNU
+#include <sched.h>
+#endif
 
 /******************************************************************************
  * simply get command-line parameter
@@ -97,8 +101,11 @@ main(int argc, char *argv[])
 
     {
         char dir[512];
-        getcwd(dir, sizeof(dir));
-        printf("directory = %s\n", dir);
+        char *p = getcwd(dir, sizeof(dir));
+	if (p == NULL)
+		perror("getcwd");
+	else
+        	printf("directory = %s\n", p);
     }
 
 #if WIN32
@@ -106,6 +113,22 @@ main(int argc, char *argv[])
         SetProcessAffinityMask(NULL, 1);
         SetPriorityClass(NULL,  REALTIME_PRIORITY_CLASS);
     }
+#endif
+#ifdef __linux__
+
+    {
+        cpu_set_t mask;
+        int status;
+
+        CPU_ZERO(&mask);
+        CPU_SET(1, &mask);
+        status = sched_setaffinity(0, sizeof(mask), &mask);
+        if (status != 0)
+        {
+            perror("sched_setaffinity");
+        }
+    }
+
 #endif
 
     /*
