@@ -1,9 +1,12 @@
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <errno.h>
 
 #include <pthread.h>
+#include <unistd.h>
 
 #define BUF_SIZE (1024*1024*1024)
 
@@ -47,6 +50,25 @@ void raninit(ranctx *x, unsigned seed)
 
 /******************************************************************************
  ******************************************************************************/
+#if defined(__MACH__) || defined(__FreeBSD__) /* works for Apple */
+#include <unistd.h>
+#include <mach/mach_time.h>
+uint64_t
+pixie_gettime(void)
+{
+    return mach_absolute_time()/1000;
+}
+void pixie_usleep(uint64_t microseconds)
+{
+    struct timespec t;
+    t.tv_nsec = microseconds * 1000;
+    if (microseconds > 1000000)
+        t.tv_sec = microseconds/1000000;
+    else
+        t.tv_sec = 0;
+    nanosleep(&t, 0);
+}
+#elif defined(CLOCK_MONOTONIC)
 uint64_t
 pixie_gettime(void)
 {
@@ -64,6 +86,7 @@ pixie_gettime(void)
     
     return tv.tv_sec * 1000000 + tv.tv_nsec/1000;
 }
+#endif
 
 
 /******************************************************************************
