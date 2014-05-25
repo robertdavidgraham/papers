@@ -1,19 +1,19 @@
 ---- SMACK/2 - benchmark program ----
-directory = /Users/Ploppy/dev/papers/smack2
+directory = /home/john/papers/smack2
 CPU width = 64-bits
 CPU vendor = "GenuineIntel"
-CPU brand = "       Intel(R) Core(TM) i7-3667U CPU @ 2.00GHz"
+CPU brand = "     Intel(R) Xeon(R) CPU E3-1265L V2 @ 2.50GHz"
 CPU codename = "Ivy Bridge" (0x306Ax)
 CPU info = type(0) family(6) model(58) stepping(9)
 
 --- low-level benchmarks ---
-c-ptr = 4.131-clocks
-c-idx = 4.110-clocks
-asm-ptr = 3.287-clocks
-asm-idx = 4.206-clocks
+c-ptr = 0.000-clocks
+c-idx = 5.036-clocks
+asm-ptr = 4.003-clocks
+asm-idx = 5.008-clocks
 
 -- smack-1 -- 
-bits/second = 4789.026-million
-clocks/byte = 4.167-clocks
-clockrate = 2.494-GHz
+bits/second = 3988.266-million
+clocks/byte = 5.015-clocks
+clockrate = 2.500-GHz
 

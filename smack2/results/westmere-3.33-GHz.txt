@@ -1,0 +1,19 @@
+---- SMACK/2 - benchmark program ----
+directory = C:\dev\papers\smack2
+CPU width = 32-bits
+CPU vendor = "GenuineIntel"
+CPU brand = "Intel(R) Core(TM) i7 CPU       X 980  @ 3.33GHz"
+CPU codename = "Westmere-EP" (0x206Cx)
+CPU info = type(0) family(6) model(44) stepping(2)
+
+--- low-level benchmarks ---
+c-ptr = 4.030-clocks
+c-idx = 4.005-clocks
+asm-ptr = 4.006-clocks
+asm-idx = 4.014-clocks
+
+-- smack-1 -- 
+bits/second = 4205.015-million
+clocks/byte = 4.068-clocks
+clockrate = 2.138-GHz
+

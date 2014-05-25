@@ -1,0 +1,19 @@
+---- SMACK/2 - benchmark program ----
+directory = C:\dev\papers\smack2
+CPU width = 32-bits
+CPU vendor = "GenuineIntel"
+CPU brand = "        Intel(R) Atom(TM) CPU N2600   @ 1.60GHz"
+CPU codename = "Cedarview" (0x3066x)
+CPU info = type(0) family(6) model(54) stepping(1)
+
+--- low-level benchmarks ---
+c-ptr = 4.437-clocks
+c-idx = 3.021-clocks
+asm-ptr = 3.025-clocks
+asm-idx = 4.211-clocks
+
+-- smack-1 -- 
+bits/second = 895.826-million
+clocks/byte = 14.257-clocks
+clockrate = 1.596-GHz
+

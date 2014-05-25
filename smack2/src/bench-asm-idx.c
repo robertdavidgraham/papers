@@ -120,7 +120,7 @@ again:
     };
 
 #else
-#error unknown processor
+//#error unknown processor
 #endif
     stop = __rdtsc();
     

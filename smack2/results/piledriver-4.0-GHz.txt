@@ -1,0 +1,19 @@
+---- SMACK/2 - benchmark program ----
+directory = /root/papers/smack2
+CPU width = 64-bits
+CPU vendor = "AuthenticAMD"
+CPU brand = "AMD FX(tm)-8350 Eight-Core Processor           "
+CPU codename = "Piledriver" (0x600F2x)
+CPU info = type(0) family(15) model(2) stepping(0)
+
+--- low-level benchmarks ---
+c-ptr = 0.000-clocks
+c-idx = 9.166-clocks
+asm-ptr = 3.813-clocks
+asm-idx = 4.922-clocks
+
+-- smack-1 -- 
+bits/second = 6463.416-million
+clocks/byte = 4.974-clocks
+clockrate = 4.018-GHz
+

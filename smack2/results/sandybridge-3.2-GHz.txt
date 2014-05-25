@@ -1,0 +1,19 @@
+---- SMACK/2 - benchmark program ----
+directory = /home/john/papers/smack2
+CPU width = 64-bits
+CPU vendor = "GenuineIntel"
+CPU brand = "          Intel(R) Xeon(R) CPU E31230 @ 3.20GHz"
+CPU codename = "Sandy Bridge" (0x206Ax)
+CPU info = type(0) family(6) model(42) stepping(7)
+
+--- low-level benchmarks ---
+c-ptr = 0.000-clocks
+c-idx = 5.003-clocks
+asm-ptr = 4.002-clocks
+asm-idx = 5.020-clocks
+
+-- smack-1 -- 
+bits/second = 5074.916-million
+clocks/byte = 5.033-clocks
+clockrate = 3.193-GHz
+
